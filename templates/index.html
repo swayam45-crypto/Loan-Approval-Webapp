@@ -210,7 +210,7 @@
 </div>
 <div class="flex flex-col gap-xs">
 <label class="text-label-lg font-label-lg text-on-surface-variant">Annual Income (₹)</label>
-<input id="person_income" class="bg-surface-container-low border-none rounded-lg p-3 text-body-md focus:ring-2 focus:ring-secondary focus:bg-white transition-all" placeholder="e.g. 75000" type="number" min="0" value="50000" required>
+<input id="person_income" class="bg-surface-container-low border-none rounded-lg p-3 text-body-md focus:ring-2 focus:ring-secondary focus:bg-white transition-all" placeholder="e.g. 75000" type="number" min="8000" max="1000000" value="50000" required>
 </div>
 <div class="flex flex-col gap-xs">
 <label class="text-label-lg font-label-lg text-on-surface-variant">Employment Years</label>
@@ -227,11 +227,11 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
 <div class="flex flex-col gap-xs">
 <label class="text-label-lg font-label-lg text-on-surface-variant">Loan Amount (₹)</label>
-<input id="loan_amnt" class="bg-surface-container-low border-none rounded-lg p-3 text-body-md focus:ring-2 focus:ring-secondary focus:bg-white transition-all" placeholder="e.g. 15000" type="number" min="0" value="10000" required>
+<input id="loan_amnt" class="bg-surface-container-low border-none rounded-lg p-3 text-body-md focus:ring-2 focus:ring-secondary focus:bg-white transition-all" placeholder="e.g. 15000" type="number" min="500" max="35000" value="10000" required>
 </div>
 <div class="flex flex-col gap-xs">
 <label class="text-label-lg font-label-lg text-on-surface-variant">Interest Rate (%)</label>
-<input id="loan_int_rate" class="bg-surface-container-low border-none rounded-lg p-3 text-body-md focus:ring-2 focus:ring-secondary focus:bg-white transition-all" placeholder="e.g. 5.5" step="0.1" min="0" max="40" type="number" value="10" required>
+<input id="loan_int_rate" class="bg-surface-container-low border-none rounded-lg p-3 text-body-md focus:ring-2 focus:ring-secondary focus:bg-white transition-all" placeholder="e.g. 5.5" step="0.1" min="5" max="20" type="number" value="10" required>
 </div>
 <div class="flex flex-col gap-xs">
 <label class="text-label-lg font-label-lg text-on-surface-variant">Loan Intent</label>
@@ -246,11 +246,11 @@
 </div>
 <div class="flex flex-col gap-xs">
 <label class="text-label-lg font-label-lg text-on-surface-variant">Credit Score</label>
-<input id="credit_score" class="bg-surface-container-low border-none rounded-lg p-3 text-body-md focus:ring-2 focus:ring-secondary focus:bg-white transition-all" placeholder="e.g. 720" type="number" min="300" max="850" value="650" required>
+<input id="credit_score" class="bg-surface-container-low border-none rounded-lg p-3 text-body-md focus:ring-2 focus:ring-secondary focus:bg-white transition-all" placeholder="e.g. 720" type="number" min="390" max="850" value="650" required>
 </div>
 <div class="flex flex-col gap-xs">
 <label class="text-label-lg font-label-lg text-on-surface-variant">Credit History (Years)</label>
-<input id="cb_person_cred_hist_length" class="bg-surface-container-low border-none rounded-lg p-3 text-body-md focus:ring-2 focus:ring-secondary focus:bg-white transition-all" placeholder="e.g. 10" type="number" min="0" step="0.5" value="5" required>
+<input id="cb_person_cred_hist_length" class="bg-surface-container-low border-none rounded-lg p-3 text-body-md focus:ring-2 focus:ring-secondary focus:bg-white transition-all" placeholder="e.g. 10" type="number" min="2" max="30" step="0.5" value="5" required>
 </div>
 <div class="flex flex-col gap-xs">
 <label class="text-label-lg font-label-lg text-on-surface-variant">Prior Defaults</label>
