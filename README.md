@@ -1,67 +1,77 @@
-# 💰 Loan Approval Predictor — Web App
+# 💰 Loan Approval Predictor
 
-A polished, animated web app that predicts loan approval likelihood, built with **Flask** (backend) and a custom **HTML/CSS/JS** frontend.
+A machine learning web app that predicts loan approval likelihood in real time, built with **scikit-learn**, **Flask**, and a custom animated frontend.
 
-This is the "full experience" version — a real web page with smooth animations — as opposed to a simpler Streamlit version.
+🔗 **Live demo:** [loan-approval-webapp.onrender.com](https://loan-approval-webapp.onrender.com)
+📓 **Notebooks:** [`loan_prediction.ipynb`](./loan_prediction.ipynb) (EDA & visualizations) · [`loan_prediction_model.ipynb`](./loan_prediction_model.ipynb) (preprocessing & training)
+
+---
+
+## Overview
+
+This project trains a classification model on 45,000 historical loan applications to predict whether a new application is likely to be approved, and serves that model through a Flask API and a polished, animated web interface — complete with a light/dark theme toggle.
+
+## Features
+
+- **Real-time predictions** — submit applicant and loan details, get an instant approval likelihood with a confidence score
+- **Live auto-calculated fields** — loan-to-income ratio updates as you type
+- **Light/dark theme toggle** with a custom animated gradient background
+- **Clean separation of concerns** — Flask backend handles inference; frontend is plain HTML/CSS/JS with no build step
 
 ## Model
 
 - **Algorithm:** Logistic Regression (scikit-learn)
 - **Test Accuracy:** 89.71%
 - **Train Accuracy:** 89.64%
-- **Preprocessing:** `ColumnTransformer` with one-hot encoding (gender, home ownership, loan intent), ordinal encoding (education), and standard scaling (income, loan amount, credit score)
+- **Preprocessing:** a single fitted `ColumnTransformer` handling:
+  - One-hot encoding — `person_gender`, `person_home_ownership`, `loan_intent`
+  - Ordinal encoding — `person_education` (High School → Doctorate)
+  - Standard scaling — `person_income`, `loan_amnt`, `credit_score`
+  - Remaining features pass through unchanged
+
+### A note on model behavior
+
+This dataset is **synthetic** (sourced from Kaggle's Loan Approval Classification dataset). During evaluation, I found the model's decision boundary doesn't always track real-world lending intuition — for example, prior loan defaults are an almost deterministic rejection signal, while income and credit score have a much weaker and occasionally counterintuitive relationship with approval in this particular dataset. This is a property of the synthetic data generation, not a bug in the pipeline — I verified the app's predictions match the training notebook's output exactly on real rows from the dataset. Worth keeping in mind if you extend this project with real-world data.
 
 ## Project structure
 
 ```
 loan-approval-webapp/
-├── app.py                          # Flask backend (loads model + serves predictions)
+├── app.py                          # Flask backend — loads model, serves predictions
 ├── templates/
-│   └── index.html                  # Page markup
+│   └── index.html                  # Frontend markup, styling (Tailwind CDN), and theme logic
 ├── static/
-│   ├── style.css                    # Styling + animations
-│   └── script.js                     # Form handling, live ratio calc, animated result
-├── transformer.pkl                  # ← ADD THIS: your fitted ColumnTransformer
-├── loan_prediction_model.pkl        # ← ADD THIS: your trained Logistic Regression model
-├── loan_prediction.ipynb            # EDA, charts, and visual analysis
-├── loan_prediction_model.ipynb      # Preprocessing, encoding, and model training
+│   └── script.js                   # Form handling, live ratio calc, animated result rendering
+├── transformer.pkl                 # Fitted ColumnTransformer (encoding + scaling)
+├── loan_prediction_model.pkl       # Trained Logistic Regression model
+├── loan_prediction.ipynb           # EDA, charts, and visual analysis
+├── loan_prediction_model.ipynb     # Preprocessing, encoding, and model training
 ├── requirements.txt
 └── README.md
 ```
 
-⚠️ **You must add your own `transformer.pkl` and `loan_prediction_model.pkl` into this folder** (same folder as `app.py`) before running — they're not included in the download.
-
-The two notebooks aren't required for the app to run — they're included so anyone browsing the repo can see the full process: `loan_prediction.ipynb` covers the exploratory analysis (distributions, correlations, charts), and `loan_prediction_model.ipynb` covers preprocessing, encoding, and training the model that `app.py` serves.
-
-## Run locally
-
-```bash
-cd loan-approval-webapp
-pip install -r requirements.txt
-python app.py
-```
-
-Then open **http://127.0.0.1:5000** in your browser.
-
 ## How it works
 
-1. The form on the page collects all 12 input features.
-2. On submit, `script.js` sends them as JSON to the Flask `/predict` route.
-3. `app.py` builds a one-row DataFrame with the exact column names/order used in training, runs it through your fitted `transformer.pkl` (same ColumnTransformer: one-hot + ordinal encoding + scaling), then calls `loan_prediction_model.pkl.predict()`.
-4. The result (approved/rejected + probability) is sent back as JSON and animated into the result card — probability bar fills and the percentage counts up.
+1. The form collects 12 applicant and loan features (a 13th, `loan_percent_income`, is auto-calculated).
+2. On submit, the frontend sends the raw values as JSON to the Flask `/predict` endpoint.
+3. The backend builds a single-row DataFrame with the exact column names used in training, runs it through the fitted `transformer.pkl`, then calls `loan_prediction_model.pkl.predict()`.
+4. The result — approved/rejected plus a probability score — is returned as JSON and rendered with an animated result card.
 
-## Deploy for free (so you get a public link)
+## Tech stack
 
-**Render** (recommended, free tier):
-1. Push this folder to a GitHub repo (include the two `.pkl` files and both notebooks)
-2. Go to render.com → **New → Web Service** → connect your GitHub repo
-3. Build command: `pip install -r requirements.txt`
-4. Start command: `gunicorn app:app`
-5. Deploy — Render gives you a public URL like `https://loan-predictor.onrender.com`
+`Python` · `scikit-learn` · `pandas` · `Flask` · `gunicorn` · `HTML/CSS/JS` · `Tailwind CSS`
 
-**Railway** is another good free option with a very similar flow.
+## Limitations
 
-## Notes
+- Trained on a single synthetic dataset — not validated against real-world lending data or regulations
+- For educational and portfolio purposes only — not a real lending or financial decision tool
 
-- `gunicorn` is included in `requirements.txt` for production deployment (Render/Railway use it instead of Flask's dev server).
-- Free-tier services may "sleep" after inactivity — the first request after idling can take 10–20 seconds to wake up.
+## Future improvements
+
+- Add SHAP-based explainability for individual predictions
+- Compare against additional models (Random Forest, XGBoost, Gradient Boosting)
+- Validate against a real-world credit dataset to check for generalization
+
+---
+
+*AI-powered loan eligibility insights · Built by Swayam Bhoir*
