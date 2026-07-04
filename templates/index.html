@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Loan Approval Predictor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed": "#dae2fd",
+                    "secondary-fixed": "#dbe1ff",
+                    "surface": "#f7f9fb",
+                    "on-background": "#191c1e",
+                    "surface-tint": "#565e74",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "surface-variant": "#e0e3e5",
+                    "inverse-on-surface": "#eff1f3",
+                    "primary-fixed-dim": "#bec6e0",
+                    "on-secondary-fixed": "#00174b",
+                    "background": "#f7f9fb",
+                    "secondary-fixed-dim": "#b4c5ff",
+                    "tertiary-fixed": "#d3e4fe",
+                    "secondary": "#0051d5",
+                    "surface-container-high": "#e6e8ea",
+                    "on-tertiary-fixed-variant": "#38485d",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed": "#0b1c30",
+                    "surface-bright": "#f7f9fb",
+                    "outline-variant": "#c6c6cd",
+                    "tertiary": "#000000",
+                    "tertiary-fixed-dim": "#b7c8e1",
+                    "inverse-primary": "#bec6e0",
+                    "on-primary-fixed": "#131b2e",
+                    "tertiary-container": "#0b1c30",
+                    "error-container": "#ffdad6",
+                    "inverse-surface": "#2d3133",
+                    "secondary-container": "#316bf3",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-container": "#fefcff",
+                    "surface-container-highest": "#e0e3e5",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "surface-container": "#eceef0",
+                    "error": "#ba1a1a",
+                    "on-surface": "#191c1e",
+                    "outline": "#76777d",
+                    "on-surface-variant": "#45464d",
+                    "on-tertiary-container": "#75859d",
+                    "on-primary-container": "#7c839b",
+                    "surface-dim": "#d8dadc",
+                    "on-secondary-fixed-variant": "#003ea8",
+                    "primary-container": "#131b2e",
+                    "on-secondary": "#ffffff",
+                    "primary": "#000000",
+                    "on-error": "#ffffff",
+                    "success": "#0f6e56",
+                    "success-container": "#eaf3de",
+                    "on-success-container": "#27500a",
+                    "surface-container-low": "#f2f4f6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "64px",
+                    "lg": "40px",
+                    "base": "8px",
+                    "md": "24px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "48px",
+                    "sm": "12px",
+                    "xs": "4px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "headline-sm": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "label-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        body.dark-theme { background: #0a1128; color: #e4e9f7; }
+        body.dark-theme header { background: #0f1a3a; border-color: #1c2b52; }
+        body.dark-theme header span.text-on-background { color: #e4e9f7; }
+        body.dark-theme .glass-panel {
+            background: rgba(15, 26, 58, 0.75);
+            border: 1px solid rgba(120, 150, 220, 0.12);
+        }
+        body.dark-theme h1, body.dark-theme h2, body.dark-theme h3 { color: #eef1fb; }
+        body.dark-theme p.text-on-surface-variant,
+        body.dark-theme label,
+        body.dark-theme .text-on-surface-variant { color: #9aa8cc; }
+        body.dark-theme input,
+        body.dark-theme select {
+            background: #142252 !important;
+            color: #e4e9f7 !important;
+        }
+        body.dark-theme #result-section { background: #101d45 !important; border-color: #23325e; }
+        body.dark-theme footer { background: #0f1a3a; border-color: #1c2b52; }
+        body.dark-theme footer span.text-on-surface { color: #e4e9f7; }
+        body.dark-theme #theme-toggle { color: #e4e9f7; }
+        body.dark-theme #theme-toggle:hover { background: #182a5c; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface flex flex-col min-h-screen relative">
+
+<header class="bg-surface-container-lowest border-b border-outline-variant shadow-sm sticky top-0 z-20">
+  <nav class="flex justify-between items-center w-full px-margin-desktop max-w-7xl mx-auto h-20">
+    <div class="flex items-center gap-lg">
+      <span class="text-headline-md font-headline-md font-bold text-on-background">Loan Approval Predictor</span>
+      <div class="hidden md:flex items-center gap-md">
+        <a href="#" class="text-secondary font-bold border-b-2 border-secondary pb-1 text-label-lg font-label-lg">Predictor</a>
+      </div>
+    </div>
+    <button id="theme-toggle" class="p-2 text-on-surface-variant hover:bg-surface-container rounded-lg transition-all active:scale-95">
+      <span id="theme-icon" class="material-symbols-outlined">dark_mode</span>
+    </button>
+  </nav>
+</header>
+
+<div class="fixed inset-0 w-full h-full z-0 pointer-events-none opacity-40">
+<canvas id="shader-canvas" style="display:block;width:100%;height:100%"></canvas>
+</div>
+
+<main class="flex-grow flex items-center justify-center py-xl relative z-10 px-margin-mobile md:px-margin-desktop">
+<div class="glass-panel w-full max-w-5xl p-lg rounded-xl shadow-xl flex flex-col gap-lg">
+
+<div class="text-center md:text-left">
+<h1 class="text-headline-lg font-headline-lg text-on-surface mb-xs">Loan Approval Predictor</h1>
+<p class="text-body-md font-body-md text-on-surface-variant">AI-powered instant assessment for financial risk and eligibility.</p>
+</div>
+
+<form id="loan-form" class="grid grid-cols-1 lg:grid-cols-2 gap-xl">
+
+<section class="space-y-md">
+<div class="flex items-center gap-sm border-b border-outline-variant pb-xs mb-md">
+<span class="material-symbols-outlined text-secondary">person</span>
+<h2 class="text-headline-sm font-headline-sm">Applicant Details</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div class="flex flex-col gap-xs">
+<label class="text-label-lg font-label-lg text-on-surface-variant">Age</label>
+<input id="person_age" class="bg-surface-container-low border-none rounded-lg p-3 text-body-md focus:ring-2 focus:ring-secondary focus:bg-white transition-all" placeholder="e.g. 28" type="number" min="18" max="100" value="30" required>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="text-label-lg font-label-lg text-on-surface-variant">Gender</label>
+<select id="person_gender" class="bg-surface-container-low border-none rounded-lg p-3 text-body-md focus:ring-2 focus:ring-secondary focus:bg-white transition-all appearance-none">
+<option value="male">Male</option>
+<option value="female">Female</option>
+</select>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="text-label-lg font-label-lg text-on-surface-variant">Education</label>
+<select id="person_education" class="bg-surface-container-low border-none rounded-lg p-3 text-body-md focus:ring-2 focus:ring-secondary focus:bg-white transition-all appearance-none">
+<option value="High School">High school</option>
+<option value="Associate">Associate</option>
+<option value="Bachelor" selected>Bachelor's</option>
+<option value="Master">Master's</option>
+<option value="Doctorate">Doctorate</option>
+</select>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="text-label-lg font-label-lg text-on-surface-variant">Home Ownership</label>
+<select id="person_home_ownership" class="bg-surface-container-low border-none rounded-lg p-3 text-body-md focus:ring-2 focus:ring-secondary focus:bg-white transition-all appearance-none">
+<option value="RENT">Rent</option>
+<option value="OWN">Own</option>
+<option value="MORTGAGE">Mortgage</option>
+<option value="OTHER">Other</option>
+</select>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="text-label-lg font-label-lg text-on-surface-variant">Annual Income (₹)</label>
+<input id="person_income" class="bg-surface-container-low border-none rounded-lg p-3 text-body-md focus:ring-2 focus:ring-secondary focus:bg-white transition-all" placeholder="e.g. 75000" type="number" min="0" value="50000" required>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="text-label-lg font-label-lg text-on-surface-variant">Employment Years</label>
+<input id="person_emp_exp" class="bg-surface-container-low border-none rounded-lg p-3 text-body-md focus:ring-2 focus:ring-secondary focus:bg-white transition-all" placeholder="e.g. 5" type="number" min="0" max="60" value="5" required>
+</div>
+</div>
+</section>
+
+<section class="space-y-md">
+<div class="flex items-center gap-sm border-b border-outline-variant pb-xs mb-md">
+<span class="material-symbols-outlined text-secondary">account_balance</span>
+<h2 class="text-headline-sm font-headline-sm">Loan Details</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div class="flex flex-col gap-xs">
+<label class="text-label-lg font-label-lg text-on-surface-variant">Loan Amount (₹)</label>
+<input id="loan_amnt" class="bg-surface-container-low border-none rounded-lg p-3 text-body-md focus:ring-2 focus:ring-secondary focus:bg-white transition-all" placeholder="e.g. 15000" type="number" min="0" value="10000" required>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="text-label-lg font-label-lg text-on-surface-variant">Interest Rate (%)</label>
+<input id="loan_int_rate" class="bg-surface-container-low border-none rounded-lg p-3 text-body-md focus:ring-2 focus:ring-secondary focus:bg-white transition-all" placeholder="e.g. 5.5" step="0.1" min="0" max="40" type="number" value="10" required>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="text-label-lg font-label-lg text-on-surface-variant">Loan Intent</label>
+<select id="loan_intent" class="bg-surface-container-low border-none rounded-lg p-3 text-body-md focus:ring-2 focus:ring-secondary focus:bg-white transition-all appearance-none">
+<option value="PERSONAL">Personal</option>
+<option value="EDUCATION">Education</option>
+<option value="MEDICAL">Medical</option>
+<option value="VENTURE">Venture</option>
+<option value="DEBTCONSOLIDATION">Debt consolidation</option>
+<option value="HOMEIMPROVEMENT">Home improvement</option>
+</select>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="text-label-lg font-label-lg text-on-surface-variant">Credit Score</label>
+<input id="credit_score" class="bg-surface-container-low border-none rounded-lg p-3 text-body-md focus:ring-2 focus:ring-secondary focus:bg-white transition-all" placeholder="e.g. 720" type="number" min="300" max="850" value="650" required>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="text-label-lg font-label-lg text-on-surface-variant">Credit History (Years)</label>
+<input id="cb_person_cred_hist_length" class="bg-surface-container-low border-none rounded-lg p-3 text-body-md focus:ring-2 focus:ring-secondary focus:bg-white transition-all" placeholder="e.g. 10" type="number" min="0" step="0.5" value="5" required>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="text-label-lg font-label-lg text-on-surface-variant">Prior Defaults</label>
+<select id="previous_loan_defaults_on_file" class="bg-surface-container-low border-none rounded-lg p-3 text-body-md focus:ring-2 focus:ring-secondary focus:bg-white transition-all appearance-none">
+<option value="No">No</option>
+<option value="Yes">Yes</option>
+</select>
+</div>
+</div>
+</section>
+
+<div class="lg:col-span-2 flex flex-col items-center gap-md mt-base">
+<div class="bg-secondary-fixed text-on-secondary-fixed-variant px-md py-2 rounded-full text-label-lg font-label-lg flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">calculate</span>
+                    Loan as share of income: <span id="ratio-value">20.0%</span> (auto-calculated)
+                </div>
+<button id="predict-btn" type="submit" class="w-full md:w-auto px-xl py-lg bg-secondary text-on-secondary rounded-xl text-headline-sm font-headline-sm shadow-lg hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-md">
+<span id="predict-btn-label">Predict Loan Approval</span>
+<span class="material-symbols-outlined">trending_up</span>
+</button>
+</div>
+
+</form>
+
+<div id="result-section" class="bg-white rounded-xl p-md border border-outline-variant shadow-sm flex flex-col md:flex-row items-center gap-lg" style="display:none;">
+<div id="result-icon-wrap" class="flex-shrink-0 w-20 h-20 rounded-full flex items-center justify-center">
+<span id="result-icon" class="material-symbols-outlined text-[40px]">cancel</span>
+</div>
+<div class="flex-grow space-y-xs w-full">
+<div class="flex justify-between items-baseline">
+<h3 id="result-title" class="text-headline-md font-headline-md">Likely rejected</h3>
+<span class="text-headline-md font-headline-md text-on-surface"><span id="result-pct">0</span>% <span class="text-label-lg font-label-lg text-on-surface-variant">Approval Probability</span></span>
+</div>
+<div class="w-full bg-surface-container-high h-2.5 rounded-full overflow-hidden">
+<div id="result-bar" class="h-full rounded-full transition-all duration-700 ease-out" style="width: 0%;"></div>
+</div>
+<p id="result-desc" class="text-body-sm font-body-sm text-on-surface-variant mt-2">Fill in the form above and click Predict to see a result.</p>
+</div>
+</div>
+
+<p id="error-message" class="text-body-sm text-error" style="display:none;"></p>
+
+</div>
+</main>
+
+<footer class="bg-surface-container-lowest border-t border-outline-variant mt-auto z-20">
+<div class="w-full py-md px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-base max-w-7xl mx-auto">
+<div class="flex flex-col md:flex-row items-center gap-md">
+<span class="text-label-lg font-label-lg font-bold text-on-surface">Loan Approval Predictor</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">AI-powered loan eligibility insights · Built by Swayam Bhoir</span>
+</div>
+</div>
+</footer>
+
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas');
+  const ctx = canvas.getContext('2d');
+
+  function syncSize() {
+    const w = canvas.clientWidth || window.innerWidth;
+    const h = canvas.clientHeight || window.innerHeight;
+    if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+  }
+  if (typeof ResizeObserver !== 'undefined') { new ResizeObserver(syncSize).observe(canvas); }
+  syncSize();
+
+  const palettes = {
+    dark: {
+      base: '#080f24',
+      grid: 'rgba(140,170,255,0.05)',
+      blobs: [
+        { baseX: 0.20, baseY: 0.30, r: 0.55, color: 'rgba(30, 55, 140, 1)',  speed: 0.05, phase: 0 },
+        { baseX: 0.80, baseY: 0.25, r: 0.50, color: 'rgba(40, 85, 170, 1)', speed: 0.045, phase: 2 },
+        { baseX: 0.70, baseY: 0.80, r: 0.60, color: 'rgba(15, 25, 70, 1)',   speed: 0.04, phase: 4 },
+        { baseX: 0.25, baseY: 0.85, r: 0.45, color: 'rgba(45, 70, 150, 1)',  speed: 0.055, phase: 1 },
+      ],
+      alpha: 0.6,
+    },
+    light: {
+      base: '#eef1f6',
+      grid: 'rgba(20,30,60,0.035)',
+      blobs: [
+        { baseX: 0.20, baseY: 0.30, r: 0.55, color: 'rgba(200, 215, 245, 1)', speed: 0.05, phase: 0 },
+        { baseX: 0.80, baseY: 0.25, r: 0.50, color: 'rgba(190, 205, 240, 1)', speed: 0.045, phase: 2 },
+        { baseX: 0.70, baseY: 0.80, r: 0.60, color: 'rgba(210, 220, 245, 1)', speed: 0.04, phase: 4 },
+        { baseX: 0.25, baseY: 0.85, r: 0.45, color: 'rgba(195, 210, 242, 1)', speed: 0.055, phase: 1 },
+      ],
+      alpha: 0.75,
+    },
+  };
+
+  function currentPalette() {
+    return document.body.classList.contains('dark-theme') ? palettes.dark : palettes.light;
+  }
+
+  function drawGrid(w, h, gridColor) {
+    ctx.strokeStyle = gridColor;
+    ctx.lineWidth = 1;
+    const gap = 48;
+    for (let x = 0; x < w; x += gap) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, h);
+      ctx.stroke();
+    }
+    for (let y = 0; y < h; y += gap) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(w, y);
+      ctx.stroke();
+    }
+  }
+
+  function render(t) {
+    const w = canvas.width, h = canvas.height;
+    const time = t * 0.001;
+    const palette = currentPalette();
+
+    ctx.fillStyle = palette.base;
+    ctx.fillRect(0, 0, w, h);
+
+    palette.blobs.forEach(b => {
+      const x = (b.baseX + Math.sin(time * b.speed + b.phase) * 0.06) * w;
+      const y = (b.baseY + Math.cos(time * b.speed + b.phase) * 0.06) * h;
+      const r = b.r * Math.max(w, h);
+      const gradient = ctx.createRadialGradient(x, y, 0, x, y, r);
+      gradient.addColorStop(0, b.color.replace('1)', palette.alpha + ')'));
+      gradient.addColorStop(1, b.color.replace('1)', '0)'));
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, w, h);
+    });
+
+    drawGrid(w, h, palette.grid);
+
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+
+<script>
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeIcon = document.getElementById('theme-icon');
+  themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-theme');
+    const isDark = document.body.classList.contains('dark-theme');
+    themeIcon.textContent = isDark ? 'light_mode' : 'dark_mode';
+  });
+</script>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
